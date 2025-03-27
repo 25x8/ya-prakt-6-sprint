@@ -62,22 +62,9 @@ func (p *OrderProcessor) processLoop() {
 
 // processPendingOrders processes all pending orders
 func (p *OrderProcessor) processPendingOrders() {
-	ctx := context.Background()
-
 	// In a real implementation, we would query for pending orders
-	// and process them in batches. For simplicity, this is not implemented here.
-	//
-	// A real implementation would look something like:
-	//
-	// pendingOrders, err := p.repo.GetPendingOrders(ctx)
-	// if err != nil {
-	//     log.Printf("Error getting pending orders: %v", err)
-	//     return
-	// }
-	//
-	// for _, order := range pendingOrders {
-	//     p.processOrder(ctx, order)
-	// }
+	// and process them in batches.
+	// For simplicity, this implementation is just a placeholder.
 }
 
 // processOrder processes a single order
