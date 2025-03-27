@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:13-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: gophermart
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  accrual:
+    build:
+      context: .
+      dockerfile: Dockerfile.accrual
+    ports:
+      - "8081:8080"
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URI: 'postgres://postgres:postgres@postgres:5432/gophermart?sslmode=disable'
+
+  gophermart:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+      - accrual
+    environment:
+      DATABASE_URI: 'postgres://postgres:postgres@postgres:5432/gophermart?sslmode=disable'
+      ACCRUAL_SYSTEM_ADDRESS: 'http://accrual:8080'
+      RUN_ADDRESS: ':8080'
+
+volumes:
+  postgres_data: 

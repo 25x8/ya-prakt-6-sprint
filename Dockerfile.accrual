@@ -1,0 +1,15 @@
+FROM alpine:latest
+
+WORKDIR /app
+
+# Copy the accrual binary for Linux
+COPY cmd/accrual/accrual_linux_amd64 /app/accrual
+
+# Make the binary executable
+RUN chmod +x /app/accrual
+
+# Expose the port
+EXPOSE 8080
+
+# Run the accrual service
+ENTRYPOINT ["/app/accrual"] 
